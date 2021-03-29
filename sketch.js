@@ -14,17 +14,15 @@ function preload(){
 //Function to set initial environment
 function setup() {
   database=firebase.database();
-  createCanvas(1500,700);
+  createCanvas(displayWidth-5,displayHeight-120);
 
   balloon=createSprite(250,450,150,150);
   balloon.addAnimation("hotAirBalloon",balloonImage1);
   balloon.scale=0.5;
 
-  var balloonPosition=database.ref("balloon/height");
-  balloonPosition.on("value,readPosition",showError);
-
-
-  textSize(20); 
+  var balloonPosition=database.ref('balloon/height');
+  balloonPosition.on("value",readHeight,showError);
+   textSize(20); 
 }
 
 // function to display UI
@@ -32,33 +30,24 @@ function draw() {
   background(bg);
 
   if(keyDown(LEFT_ARROW)){
+    updateHeight(-10,0);
     balloon.addAnimation("hotAirBalloon",balloonImage2);
-    //write code to move air balloon in left direction
   }
   else if(keyDown(RIGHT_ARROW)){
+    updateHeight(10,0);
     balloon.addAnimation("hotAirBalloon",balloonImage2);
-    //write code to move air balloon in right direction
   }
   else if(keyDown(UP_ARROW)){
-    balloon.addAnimation("hotAirBalloon",balloonImage2);
-    //write code to move air balloon in up direction
-  }
-  else if(keyDown(DOWN_ARROW)){
-    balloon.addAnimation("hotAirBalloon",balloonImage2);
-    //write code to move air balloon in down direction
-  }
-
-
-
-  if(keyDown(UP_ARROW)){
     updateHeight(0,-10);
     balloon.addAnimation("hotAirBalloon",balloonImage2);
-    balloon.scale = balloon.scale -0.01  }
-    
-    if(keyDown(DOWN_ARROW)){
-      updateHeight(0,-10);
-      balloon.addAnimation("hotAirBalloon",balloonImage2);
-      balloon.scale = balloon.scale -0.01  }
+    balloon.scale=balloon.scale -0.005;
+  }
+  else if(keyDown(DOWN_ARROW)){
+    updateHeight(0,+10);
+    balloon.addAnimation("hotAirBalloon",balloonImage2);
+    balloon.scale=balloon.scale+0.005;
+  }
+
 
   drawSprites();
   fill(0);
